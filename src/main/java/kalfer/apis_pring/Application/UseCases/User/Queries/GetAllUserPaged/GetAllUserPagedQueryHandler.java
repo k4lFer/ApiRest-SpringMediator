@@ -6,6 +6,9 @@ import kalfer.apis_pring.Application.DTOs.Common.PagedResponse;
 import kalfer.apis_pring.Application.DTOs.User.Output.UserOutputDto;
 import kalfer.apis_pring.Domain.Interfaces.Repositories.IUserRepository;
 import lombok.AllArgsConstructor;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,29 +21,22 @@ public class GetAllUserPagedQueryHandler implements IRequestHandler<GetAllUserPa
 
     @Override
     public Result<PagedResponse<UserOutputDto>> handle(GetAllUserPagedQuery request) {
-        var pagedResult = userRepository.GetAllUserPaged(request.getPage(), request.getSize(), request.getSearch());
+        Pageable pageable = PageRequest.of(request.getPage()-1, request.getSize());
+        var page = userRepository.GetAllUserPaged(pageable, request.getSearch());
+        
+        if(page.getTotalElements() == 0) return Result.Error("Users not found !");
 
-        // Verificación de si se obtuvieron resultados
-        if (pagedResult != null && pagedResult.getItems() != null) {
-            // Mapeo de los datos de dominio a DTOs
-            List<UserOutputDto> userOutputDtos = pagedResult.getItems().stream()
-                    .map(user -> new UserOutputDto(user.getId(), user.getName(), user.getEmail()))
-                    .collect(Collectors.toList());
-
-            // Creación de la respuesta paginada
-            PagedResponse<UserOutputDto> pagedResponse = new PagedResponse<>(
-                    pagedResult.getPageNumber(),
-                    pagedResult.getPageSize(),
-                    pagedResult.getTotalCount(),
-                    pagedResult.getTotalPages(),
-                    userOutputDtos
-            );
-
-            // Devolver el resultado con éxito
-            return Result.Success(pagedResponse, "Users fetched successfully");
-        }
-
-        // Si no se obtuvieron resultados, se retorna un error
-        return Result.Error("No users found.");
+        List<UserOutputDto> dtos = page.getContent().stream()
+            .map(user -> new UserOutputDto(user.getId(), user.getName(), user.getEmail()))
+            .collect(Collectors.toList());
+    
+        PagedResponse<UserOutputDto> response = new PagedResponse<>(
+            page.getNumber() + 1,
+            page.getSize(),
+            page.getTotalPages(),
+            (int) page.getTotalElements(),
+            dtos
+        );
+        return Result.Success(response, "Users fetched successfully");
     }
 }

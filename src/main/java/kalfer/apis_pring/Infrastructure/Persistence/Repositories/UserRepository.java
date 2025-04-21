@@ -1,6 +1,5 @@
 package kalfer.apis_pring.Infrastructure.Persistence.Repositories;
 
-import kalfer.apis_pring.Domain.Common.PagedResult;
 import kalfer.apis_pring.Domain.Entities.TUser;
 import kalfer.apis_pring.Domain.Interfaces.Repositories.IUserRepository;
 import kalfer.apis_pring.Infrastructure.Persistence.Jpa.UserJpaRepository;
@@ -24,22 +23,13 @@ public class UserRepository extends GenericRepository<TUser, UUID> implements IU
     }
 
     @Override
-    public PagedResult<TUser> GetAllUserPaged(int pageNumber, int pageSize, String search) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
-        Page<TUser> page;
-
+    public Page<TUser> GetAllUserPaged(Pageable pageable, String search) {
         if (search != null && !search.isEmpty()) {
-            page = userJpaRepository.findByNameContainingIgnoreCase(search, pageable);
-        } else {
-            page = userJpaRepository.findAll(pageable);
+            return userJpaRepository.findByNameContainingIgnoreCase(search, pageable);
         }
-
-        return new PagedResult<>(
-                page.getContent(),
-                (int) page.getTotalElements(),
-                pageNumber,
-                pageSize
-        );
+        else{
+            return userJpaRepository.findAll(pageable);
+        } 
     }
 
 }

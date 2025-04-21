@@ -1,10 +1,14 @@
 package kalfer.apis_pring.Domain.Interfaces.Repositories;
 
-import kalfer.apis_pring.Domain.Common.PagedResult;
+
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import kalfer.apis_pring.Domain.Entities.TUser;
 import kalfer.apis_pring.Domain.Interfaces.Generic.IGenericRepository;
 
 public interface IUserRepository extends IGenericRepository<TUser>
 {
-    PagedResult<TUser> GetAllUserPaged(int pageNumber, int pageSize, String search);
+    Page<TUser> GetAllUserPaged(Pageable pageable, String search);
 }
