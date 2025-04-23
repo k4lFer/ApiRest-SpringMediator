@@ -3,10 +3,8 @@ package kalfer.apis_pring.Application.UseCases.User.Queries.GetUser;
 import kalfer.apis_pring.Application.Common.Mediator.IRequestHandler;
 import kalfer.apis_pring.Application.Common.Result;
 import kalfer.apis_pring.Application.DTOs.User.Output.UserOutputDto;
-import kalfer.apis_pring.Domain.Entities.TUser;
 import kalfer.apis_pring.Domain.Interfaces.Repositories.IUserRepository;
 import lombok.AllArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

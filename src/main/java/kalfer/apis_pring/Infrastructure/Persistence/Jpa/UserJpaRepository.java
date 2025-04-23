@@ -9,4 +9,5 @@ import java.util.UUID;
 
 public interface UserJpaRepository extends JpaRepository<TUser, UUID> {
     Page<TUser> findByNameContainingIgnoreCase(String name, Pageable pageable);
+    TUser findByEmail(String email);
 }

@@ -24,31 +24,20 @@ public class UserController {
                                                   @RequestParam(required = false) String search)
     {
         var result = mediator.send(new GetAllUserPagedQuery(page, size, search));
-
-        if (result.isSuccess()) {
-            return ResponseEntity.ok(result);
-        }
-        return ResponseEntity.badRequest().body(result.getMessage());
-
+        return ResponseEntity.status(result.getHttpStatus()).body(result);
     }
 
     @GetMapping("/Get")
     public ResponseEntity<?> GetUser(@RequestParam UUID id)
     {
         var result = mediator.send(new GetUserQuery(id));
-        if(result.isSuccess()){
-            return ResponseEntity.ok(result);
-        }
-        return  ResponseEntity.badRequest().body(result.getMessage());
+        return  ResponseEntity.status(result.getHttpStatus()).body(result);
     }
 
     @PostMapping("/Create")
     public ResponseEntity<?> Create(@ModelAttribute CreateUserDto input)
     {
         var result = mediator.send(new CreateUserCommand(input));
-        if(result.isSuccess()){
-            return ResponseEntity.ok(result);
-        }
-        return  ResponseEntity.badRequest().body(result.getMessage());
+        return  ResponseEntity.status(result.getHttpStatus()).body(result);
     }
 }

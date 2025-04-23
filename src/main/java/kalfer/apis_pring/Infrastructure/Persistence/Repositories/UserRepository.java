@@ -6,7 +6,6 @@ import kalfer.apis_pring.Infrastructure.Persistence.Jpa.UserJpaRepository;
 import kalfer.apis_pring.Infrastructure.Persistence.Repositories.Generic.GenericRepository;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -30,6 +29,11 @@ public class UserRepository extends GenericRepository<TUser, UUID> implements IU
         else{
             return userJpaRepository.findAll(pageable);
         } 
+    }
+
+    @Override
+    public TUser GetByEmail(String email) {
+        return userJpaRepository.findByEmail(email);
     }
 
 }

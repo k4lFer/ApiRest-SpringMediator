@@ -68,5 +68,5 @@ public class Result<T> implements IOutput<T> {
         messageDto.addMessage((msg == null || msg.isEmpty()) ? "Resource not found" : msg);
         return new Result<>(null, false, HttpStatus.NOT_FOUND, List.of(messageDto));
     }
-
+    
 }

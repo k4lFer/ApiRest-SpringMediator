@@ -11,4 +11,5 @@ import kalfer.apis_pring.Domain.Interfaces.Generic.IGenericRepository;
 public interface IUserRepository extends IGenericRepository<TUser>
 {
     Page<TUser> GetAllUserPaged(Pageable pageable, String search);
+    TUser GetByEmail(String email);
 }
